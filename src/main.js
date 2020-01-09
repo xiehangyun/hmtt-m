@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-
+import '@/utils/validation'
 // 加载注册vant 组件模块
 import './utils/register-vant'
 
