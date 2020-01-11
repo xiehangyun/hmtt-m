@@ -1,4 +1,5 @@
 <template>
+<van-pull-refresh v-model="isLoading" @refresh="onRefresh">
   <van-list
     v-model="loading"
     :finished="finished"
@@ -11,6 +12,7 @@
       :title="item.title"
     />
   </van-list>
+  </van-pull-refresh>
 </template>
 
 <script>
@@ -28,7 +30,8 @@ export default {
       list: [],
       loading: false,
       finished: false,
-      timestamp: null
+      timestamp: null,
+      isLoading: false
     }
   },
   methods: {
@@ -41,6 +44,16 @@ export default {
       this.list.push(...results)
       this.loading = false
       results.length ? this.timestamp = timestamp : this.finished = true
+    },
+    async onRefresh () {
+      let { data: { data: { results } } } = await getArticles({
+        channel_id: this.channel.id,
+        timestamp: Date.now(),
+        with_top: 1
+      })
+      this.list.unshift(...results)
+      this.isLoading = false
+      this.$toast(results.length ? `更新了${results.length}条数据` : '暂无数据更新')
     }
   },
   created () {
