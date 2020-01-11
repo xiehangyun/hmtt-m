@@ -16,3 +16,19 @@ export const getCode = data => {
     url: `/app/v1_0/sms/codes/${data}`
   })
 }
+
+// 获取用户详情
+export const getUserInfo = () => {
+  return request({
+    method: 'GET',
+    url: '/app/v1_0/user'
+  })
+}
+
+// 获取指定用户信息
+export const getUserById = data => {
+  return request({
+    method: 'GET',
+    url: `/app/v1_0/users/${data}`
+  })
+}

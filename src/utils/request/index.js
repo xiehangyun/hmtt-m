@@ -26,8 +26,7 @@ request.interceptors.request.use(function (config) {
 request.interceptors.response.use(function (response) {
   return response
 }, function (error) {
-  let url = error.config.url
-  let method = error.config.method
+  let { url, method } = error.config
   if (url === '/app/v1_0/authorizations' && method === 'post') {
     toast.fail('登陆失败')
   } else if (url.indexOf('/app/v1_0/sms/codes/' !== -1 && method === 'get')) {

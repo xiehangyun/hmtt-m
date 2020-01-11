@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <van-nav-bar title="登陆">
-      <van-icon slot="left" name="cross" color='#fff'></van-icon>
+      <van-icon slot="left" name="cross" color='#fff' @click="$router.back(-1)"></van-icon>
     </van-nav-bar>
     <van-cell-group>
       <ValidationObserver ref="form">
@@ -67,6 +67,7 @@ export default {
       let result = await login(this.user)
       this.$store.commit('setUser', result.data.data)
       this.$toast.success('登陆成功')
+      this.$router.push('/')
     },
     async SandingCode () {
       // 使用引入的validate对象手动指定校验单个数据

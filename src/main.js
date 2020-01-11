@@ -9,6 +9,10 @@ import './utils/register-vant'
 // 加载全局样式
 import './styles/index.less'
 import 'amfe-flexible'
+
+// 注册全局组件
+import Components from '@/components'
+Vue.use(Components)
 Vue.config.productionTip = false
 
 new Vue({
