@@ -7,3 +7,11 @@ export const getUserChannels = () => {
     method: 'GET'
   })
 }
+
+// 获取全部频道列表
+export const getAllChannels = () => {
+  return request({
+    url: '/app/v1_0/channels',
+    method: 'GET'
+  })
+}
