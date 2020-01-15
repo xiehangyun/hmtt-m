@@ -55,7 +55,7 @@ export default {
       this.isEditShow = !this.isEditShow
     },
     userChannelsHandle (index) {
-      if (this.isEditShow) {
+      if (this.isEditShow && index !== 0) {
         this.userChannels.splice(index, 1)
       } else {
         this.$emit('activeChange', index)
@@ -71,9 +71,7 @@ export default {
       let { userChannels, AllChannels } = this
       let channels = []
       AllChannels.forEach(item => {
-        if (!userChannels.find(value => value.id === item.id)) {
-          channels.push(item)
-        }
+        !userChannels.find(value => value.id === item.id) && channels.push(item)
       })
       return channels
     }
@@ -100,7 +98,7 @@ export default {
 
 }
 
-.van-grid-item__text, .text {
+/deep/ .van-grid-item__text, .text {
       font-size: 14px;
       color: #222;
 }

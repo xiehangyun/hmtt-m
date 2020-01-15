@@ -29,7 +29,7 @@ request.interceptors.response.use(function (response) {
   let { url, method } = error.config
   if (url === '/app/v1_0/authorizations' && method === 'post') {
     toast.fail('登陆失败')
-  } else if (url.indexOf('/app/v1_0/sms/codes/' !== -1 && method === 'get')) {
+  } else if (url.indexOf('/app/v1_0/sms/codes/') !== -1 && method === 'get') {
     toast.fail('验证码发送失败，请稍后重试')
   }
   return Promise.reject(error)

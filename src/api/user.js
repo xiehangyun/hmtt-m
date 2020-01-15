@@ -32,3 +32,22 @@ export const getUserById = data => {
     url: `/app/v1_0/users/${data}`
   })
 }
+
+// 对文章点赞
+export const likings = target => {
+  return request({
+    method: 'POST',
+    url: '/app/v1_0/article/likings',
+    data: {
+      target
+    }
+  })
+}
+
+// 取消对文章点赞
+export const delLikings = target => {
+  return request({
+    method: 'DELETE',
+    url: `/app/v1_0/article/likings/${target}`
+  })
+}

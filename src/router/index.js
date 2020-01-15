@@ -33,6 +33,15 @@ const routes = [
   {
     path: '/userPage/:userById',
     component: () => import('@/views/user')
+  },
+  {
+    path: '/search',
+    component: () => import('@/views/search')
+  },
+  {
+    path: '/article/:articleId',
+    component: () => import('@/views/article'),
+    props: true
   }
 ]
 
