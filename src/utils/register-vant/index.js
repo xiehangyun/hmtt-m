@@ -19,7 +19,8 @@ import { Button,
   PullRefresh,
   Popup,
   Search,
-  Loading } from 'vant'
+  Loading,
+  Divider } from 'vant'
 
 Vue.use(Button)
   .use(Cell)
@@ -42,3 +43,4 @@ Vue.use(Button)
   .use(Popup)
   .use(Search)
   .use(Loading)
+  .use(Divider)

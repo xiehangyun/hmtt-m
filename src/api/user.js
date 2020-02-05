@@ -51,3 +51,22 @@ export const delLikings = target => {
     url: `/app/v1_0/article/likings/${target}`
   })
 }
+
+// 关注用户
+export const addFollowings = target => {
+  return request({
+    method: 'POST',
+    url: '/app/v1_0/user/followings',
+    data: {
+      target
+    }
+  })
+}
+
+// 取消关注用户
+export const delFollowings = target => {
+  return request({
+    url: `/app/v1_0/user/followings/${target}`,
+    method: 'DELETE'
+  })
+}

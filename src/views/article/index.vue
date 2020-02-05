@@ -33,13 +33,21 @@
           />
           <div class="text">
             <p class="name">{{article.aut_name}}</p>
-            <p class="time">{{article.pubdate}}</p>
+            <p class="time">{{article.pubdate | relativeTime}}</p>
           </div>
         </div>
-        <van-button class="follow-btn" type="info" size="small" round>+ 关注</van-button>
+        <van-button
+         v-if="!user || article.aut_id !== user.id"
+         class="follow-btn"
+         :type="article.is_followed ? 'default' : 'info'"
+         size="small"
+         round
+         @click="onfollowed"
+        >{{article.is_followed ? '已关注' : '+ 关注' }}</van-button>
       </div>
       <div class="markdown-body" v-html="article.content">
       </div>
+      <van-divider>正文结束</van-divider>
     </div>
     <!-- /文章详情 -->
 
@@ -55,6 +63,11 @@
       >点击重试</van-button>
     </div>
     <!-- /加载失败提示 -->
+
+    <!-- 文章评论 -->
+    <van-cell ref="comment-area-tip" title="全部评论" :border="false" />
+    <article-comment :article-id='articleId' />
+    <!-- /文章评论 -->
 
     <!-- 底部区域 -->
     <div class="footer">
@@ -76,7 +89,8 @@
       />
       <van-icon
         color="#e5645f"
-        name="good-job"
+        :name="article.attitude === 1 ? 'good-job' : 'good-job-o'"
+        @click="onlikings"
       />
       <van-icon class="share-icon" name="share" />
     </div>
@@ -86,10 +100,15 @@
 
 <script>
 import { getArticleById, postCollected, delCollected } from '@/api/article.js'
-// import { likings, delLikings } from '@/api/user.js'
+import { likings, delLikings, addFollowings, delFollowings } from '@/api/user.js'
+import { mapState } from 'vuex'
+import ArticleComment from './components/article-comment'
+
 export default {
   name: 'ArticlePage',
-  components: {},
+  components: {
+    ArticleComment
+  },
   props: {
     articleId: {
       type: String,
@@ -102,12 +121,16 @@ export default {
       loading: true
     }
   },
-  computed: {},
+  computed: {
+    ...mapState(['user'])
+  },
   watch: {},
   created () {
     this.getArticleContent()
   },
-  mounted () {},
+  mounted () {
+
+  },
   methods: {
     async getArticleContent () {
       this.loading = true
@@ -132,11 +155,50 @@ export default {
           this.$toast.success('取消成功')
         } else {
           await postCollected(this.articleId)
-          this.$toast.fail('收藏成功')
+          this.$toast.success('收藏成功')
         }
         this.article.is_collected = !this.article.is_collected
       } catch (err) {
-        console.log(err)
+        this.$toast('操作失败')
+      }
+    },
+    async onlikings () {
+      this.$toast.loading({
+        duration: 0,
+        message: '操作中...',
+        forbidClick: true
+      })
+      try {
+        if (this.article.attitude === 1) {
+          await delLikings(this.articleId)
+          this.$toast.success('取消成功')
+          this.article.attitude = -1
+        } else {
+          await likings(this.articleId)
+          this.$toast.success('点赞成功')
+          this.article.attitude = 1
+        }
+      } catch (err) {
+        this.$toast('操作失败')
+      }
+    },
+    async onfollowed () {
+      this.$toast.loading({
+        duration: 0,
+        message: '操作中...',
+        forbidClick: true
+      })
+      try {
+        if (this.article.is_followed) {
+          await delFollowings(this.article.aut_id)
+          this.article.is_followed = false
+          this.$toast.success('取消成功')
+        } else {
+          await addFollowings(this.article.aut_id)
+          this.article.is_followed = true
+          this.$toast.success('关注成功')
+        }
+      } catch (err) {
         this.$toast('操作失败')
       }
     }
@@ -148,7 +210,7 @@ export default {
 @import "./github-markdown.css";
 
 .article-container {
-  padding: 46px 20px 50px;
+  padding: 46px 20px 150px;
   background: #fff;
   .loading {
     padding-top: 100px;

@@ -5,6 +5,7 @@ import store from './store'
 import '@/utils/validation'
 // 加载注册vant 组件模块
 import './utils/register-vant'
+import './utils/datatime'
 
 // 加载全局样式
 import './styles/index.less'
